@@ -1,14 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	devtools: { enabled: true },
-	modules: ['@nuxtjs/tailwindcss', '@nuxt/ui', '@nuxtjs/google-fonts'],
-	tailwindcss: {
-		cssPath: ['~/assets/css/tailwind.css', { injectPosition: 'first' }],
-		configPath: 'tailwind.config',
-		exposeConfig: {
-			level: 2,
+	devtools: { enabled: false },
+	modules: ['@nuxt/ui', '@nuxtjs/google-fonts'],
+	css: ['~/assets/css/main.css'],
+	postcss: {
+		plugins: {
+			tailwindcss: {},
+			autoprefixer: {},
 		},
-		config: {},
-		viewer: true,
+	},
+	googleFonts: {
+		families: {
+			Inter: true,
+			download: true,
+			inject: true,
+		},
 	},
 });
