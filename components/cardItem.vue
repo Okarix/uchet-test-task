@@ -3,7 +3,7 @@ defineProps({
 	id: Number,
 	imageUrl: String,
 	title: String,
-	price: String,
+	price: Number,
 	isFavorite: Boolean,
 	isAdded: Boolean,
 });
@@ -13,8 +13,8 @@ defineProps({
 	<div class="relative bg-zinc-800 border border-zinc-800 rounded-3xl p-8 cursor-pointer hover:-translate-y-2 hover:shadow-xl hover:shadow-zinc-800 transition">
 		<img
 			:src="imageUrl"
-			alt="Sneaker"
-			class="rounded-md"
+			alt="Product"
+			class="rounded-md w-64 h-64 object-contain"
 		/>
 
 		<p class="mt-2">{{ title }}</p>
