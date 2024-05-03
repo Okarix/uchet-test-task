@@ -1,28 +1,33 @@
 import { defineStore } from 'pinia';
-import type { IItem, IState } from '~/types/dto';
+import type { IProduct } from '~/types/dto';
 
-export const useProductsStore = defineStore({
-	id: 'products',
-	state: (): IState => ({
-		items: [],
-		cart: [],
-		favorites: [],
-	}),
-	actions: {
-		addToCart(item: IItem) {
-			this.cart.push(item);
-		},
-		removeFromCart(item: IItem) {
-			this.cart.splice(this.cart.indexOf(item), 1);
-		},
+export const useProductsStore = defineStore('products', () => {
+	const items = ref<IProduct[]>([]);
+	const cart = ref<IProduct[]>([]);
+	const favorites = ref<IProduct[]>([]);
 
-		async fetchItems() {
-			try {
-				const data: IItem[] = await $fetch('https://97414763bdeb5f30.mokky.dev/items');
-				this.items = data;
-			} catch (err) {
-				console.error(err);
-			}
-		},
-	},
+	function addToCart(item: IProduct) {
+		cart.value = [...cart.value, item];
+	}
+
+	function removeFromCart(item: IProduct) {
+		cart.value.splice(cart.value.indexOf(item), 1);
+	}
+
+	async function fetchItems(params: string | null = null) {
+		const { data, error } = await useFetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`);
+		items.value = data.value as IProduct[];
+		if (error.value) {
+			console.error(error);
+		}
+	}
+
+	return {
+		items,
+		cart,
+		favorites,
+		addToCart,
+		removeFromCart,
+		fetchItems,
+	};
 });

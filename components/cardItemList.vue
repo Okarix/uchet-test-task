@@ -1,10 +1,14 @@
 <script setup lang="ts">
-const store = useProductsStore();
-const items = ref();
+import { useProductsStore } from '~/stores/products';
+import { storeToRefs } from 'pinia';
 
-onMounted(() => {
-	items.value = store.items;
+const props = defineProps({
+	params: String,
 });
+
+const store = useProductsStore();
+store.fetchItems(props.params ? `category=${props.params}` : '');
+const { items } = storeToRefs(store);
 </script>
 
 <template>

@@ -1,12 +1,3 @@
-<script setup lang="ts">
-const store = useProductsStore();
-const items = ref();
-
-onMounted(() => {
-	store.fetchItems();
-});
-</script>
-
 <template>
 	<div class="py-14">
 		<div class="pl-40 flex justify-between">

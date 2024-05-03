@@ -6,7 +6,7 @@
 		</div>
 		<main class="flex gap-8">
 			<Sidebar />
-			<CardItemList />
+			<CardItemList params="guitar" />
 		</main>
 	</div>
 </template>
