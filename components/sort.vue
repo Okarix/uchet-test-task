@@ -1,8 +1,20 @@
+<script setup lang="ts">
+import { useProductsStore } from '#imports';
+
+const { sort } = useProductsStore();
+
+const onChangeSelect = (event: any) => {
+	sort(event.target.value);
+};
+</script>
+
 <template>
-	<USelect
-		color="white"
-		size="lg"
-		:options="['Все', 'Дешевые', 'Дорогие']"
-		placeholder="Сортировать"
-	/>
+	<select
+		@change="onChangeSelect"
+		class="py-2 px-3 bg-gray-900 border border-slate-700 rounded-md outline-none"
+	>
+		<option value="name">Все</option>
+		<option value="-price">По цене (дорогие)</option>
+		<option value="price">По цене (дешевые)</option>
+	</select>
 </template>
