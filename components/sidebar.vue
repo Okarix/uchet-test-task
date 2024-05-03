@@ -6,12 +6,15 @@ const links = [
 	},
 	{
 		label: 'Гитары',
+		to: '/guitars',
 	},
 	{
 		label: 'Ударные',
+		to: '/drums',
 	},
 	{
 		label: 'Клавишные',
+		to: '/keys',
 	},
 ];
 </script>

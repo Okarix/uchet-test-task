@@ -11,21 +11,26 @@
 			<p class="text-xl font-bold">test-task</p>
 		</div>
 		<div class="flex items-center gap-6">
-			<img
-				src="../assets/icons/home.svg"
-				alt="Home"
-				class="w-8 h-8 cursor-pointer hover:opacity-10"
-			/>
-			<img
-				src="../assets/icons/heart.svg"
-				alt="Favorites"
-				class="w-8 h-8 cursor-pointer hover:opacity-10"
-			/>
-			<img
-				src="../assets/icons/cart.svg"
-				alt="Cart"
-				class="w-8 h-8 cursor-pointer hover:opacity-10"
-			/>
+			<nuxt-link to="/">
+				<img
+					src="../assets/icons/home.svg"
+					alt="Home"
+					class="w-8 h-8 cursor-pointer hover:opacity-10"
+			/></nuxt-link>
+			<nuxt-link to="/favorites">
+				<img
+					src="../assets/icons/heart.svg"
+					alt="Favorites"
+					class="w-8 h-8 cursor-pointer hover:opacity-10"
+				/>
+			</nuxt-link>
+			<nuxt-link to="/cart">
+				<img
+					src="../assets/icons/cart.svg"
+					alt="Cart"
+					class="w-8 h-8 cursor-pointer hover:opacity-10"
+				/>
+			</nuxt-link>
 		</div>
 	</header>
 </template>

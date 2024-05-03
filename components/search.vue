@@ -1,8 +1,9 @@
 <template>
-	<USelect
-		color="white"
+	<UInput
+		icon="i-heroicons-magnifying-glass-20-solid"
 		size="lg"
-		:options="['Все', 'Дешевые', 'Дорогие']"
-		placeholder="Сортировать"
+		color="white"
+		:trailing="false"
+		placeholder="Поиск..."
 	/>
 </template>
