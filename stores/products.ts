@@ -14,7 +14,7 @@ export const useProductsStore = defineStore('products', () => {
 		cart.value.splice(cart.value.indexOf(item), 1);
 	}
 
-	function sort(sortBy: 'price' | '-price' | 'name') {
+	function sortBy(sortBy: 'price' | '-price' | 'name') {
 		switch (sortBy) {
 			case 'price':
 				items.value.sort((a, b) => a.price - b.price);
@@ -41,7 +41,7 @@ export const useProductsStore = defineStore('products', () => {
 	return {
 		items,
 		cart,
-		sort,
+		sortBy,
 		favorites,
 		addToCart,
 		removeFromCart,

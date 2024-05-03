@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useProductsStore } from '#imports';
 
-const { sort } = useProductsStore();
+const { sortBy } = useProductsStore();
 
 const onChangeSelect = (event: any) => {
-	sort(event.target.value);
+	sortBy(event.target.value);
 };
 </script>
 
