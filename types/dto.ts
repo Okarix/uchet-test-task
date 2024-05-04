@@ -6,9 +6,11 @@ export interface IProduct {
 }
 
 export interface IProductAdditionalProp {
-	isFavorite: boolean | null;
-	isAdded: boolean | null;
+	isFavorite: boolean | undefined;
+	isAdded: boolean | undefined;
 	favoriteId: number | null;
+	onClickFavorite: (() => void) | undefined;
+	onClickAdd: (() => void) | undefined;
 }
 
 export type MergedProduct = IProduct & IProductAdditionalProp;

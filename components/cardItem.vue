@@ -1,16 +1,16 @@
-<script setup>
-import { useProductsStore } from '#imports';
+<script setup lang="ts">
+import { defineProps } from 'vue';
 
-defineProps({
+const props = defineProps({
 	id: Number,
 	imageUrl: String,
 	title: String,
 	price: Number,
 	isFavorite: Boolean,
 	isAdded: Boolean,
+	onClickFavorite: Function,
+	onClickAdd: Function,
 });
-
-const { addToFavorite } = useProductsStore();
 </script>
 
 <template>
@@ -30,13 +30,14 @@ const { addToFavorite } = useProductsStore();
 			</div>
 
 			<img
+				@click="onClickAdd"
 				src="../assets/icons/add.svg"
 				alt="Add"
 			/>
 			<img
 				src="../assets/icons/like_1.svg"
 				alt="Like"
-				@click="addToFavorite({ id })"
+				@click="onClickFavorite"
 			/>
 		</div>
 	</div>

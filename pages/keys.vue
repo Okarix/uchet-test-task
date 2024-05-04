@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useProductsStore } from '#imports';
+const store = useProductsStore();
+store.fetchItems('category=keys');
+const { items } = storeToRefs(store);
+</script>
+
 <template>
 	<div class="py-14">
 		<div class="pl-40 flex justify-between">
@@ -6,7 +13,7 @@
 		</div>
 		<main class="flex gap-8">
 			<Sidebar />
-			<CardItemList params="keys" />
+			<CardItemList :items="items" />
 		</main>
 	</div>
 </template>

@@ -1,22 +1,13 @@
 <script setup lang="ts">
-import { useProductsStore } from '~/stores/products';
-import { storeToRefs } from 'pinia';
-import { useRoute } from 'vue-router';
+import { defineProps, defineEmits } from 'vue';
+import { type MergedProduct } from '~/types/dto';
 
 const props = defineProps({
-	params: String,
+	items: Array<MergedProduct>,
+	isFavorites: Boolean,
 });
 
-const route = useRoute();
-
-const store = useProductsStore();
-
-if (route.name === 'favorites') {
-	store.fetchFavorites();
-} else {
-	store.fetchItems(props.params ? `category=${props.params}` : '');
-}
-const { items } = storeToRefs(store);
+const emit = defineEmits(['addToFavorite', 'addToCart']);
 </script>
 
 <template>
@@ -24,11 +15,15 @@ const { items } = storeToRefs(store);
 		<div class="grid grid-cols-3 gap-5 mt-5">
 			<CardItem
 				v-for="item in items"
-				:id="item.id"
 				:key="item.id"
 				:title="item.title"
 				:image-url="item.imageUrl"
 				:price="item.price"
+				:is-favorite="item.isFavorite"
+				:id="item.id"
+				:on-click-favorite="isFavorites ? null : () => emit('addToFavorite', item)"
+				:on-click-add="isFavorites ? null : () => emit('addToCart', item)"
+				:is-added="item.isAdded"
 			/>
 		</div>
 	</div>

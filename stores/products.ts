@@ -2,15 +2,15 @@ import { defineStore } from 'pinia';
 import type { IProduct, MergedProduct } from '~/types/dto';
 
 export const useProductsStore = defineStore('products', () => {
-	const items = ref<IProduct[]>([]);
-	const cart = ref<IProduct[]>([]);
-	const favorites = ref<IProduct[]>([]);
+	const items = ref<MergedProduct[]>([]);
+	const cart = ref<MergedProduct[]>([]);
+	const favorites = ref<MergedProduct[]>([]);
 
-	function addToCart(item: IProduct) {
+	function addToCart(item: MergedProduct) {
 		cart.value = [...cart.value, item];
 	}
 
-	function removeFromCart(item: IProduct) {
+	function removeFromCart(item: MergedProduct) {
 		cart.value.splice(cart.value.indexOf(item), 1);
 	}
 
@@ -31,35 +31,53 @@ export const useProductsStore = defineStore('products', () => {
 	}
 
 	async function fetchItems(params: string | null = null) {
-		const { data, error } = (await useFetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`)) as any;
-		if (error.value) {
-			console.error(error);
-		}
+		try {
+			const data = (await $fetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`)) as any;
 
-		items.value = data.value.map((obj: any) => ({
-			...obj,
-			isFavorite: false,
-			isAdded: false,
-			favoriteId: null,
-		}));
+			items.value = data.map((obj: IProduct) => ({
+				...obj,
+				isFavorite: false,
+				isAdded: false,
+				favoriteId: null,
+			}));
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	async function fetchFavorites() {
-		const { data, error } = (await useFetch(`https://97414763bdeb5f30.mokky.dev/favorites?_relations=items`)) as any;
-		if (error.value) {
-			console.error(error);
-		}
+		try {
+			const data = (await $fetch('https://157b2cf8830f04b6.mokky.dev/favorites')) as any;
 
-		items.value = data.value.map((item: any) => {
-			return {
-				...item.item,
-				isFavorite: true,
-				favoriteId: item.id,
-			};
-		});
+			items.value = items.value.map(item => {
+				const favorite = data.find((favorite: any) => favorite.item_id === item.id);
+
+				if (!favorite) {
+					return item;
+				}
+
+				return {
+					...item,
+					isFavorite: true,
+					favoriteId: favorite.id,
+				};
+			});
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
-	async function addToFavorite(item: MergedProduct) {
+	async function fetchFavoritesOnPage() {
+		try {
+			const data = (await $fetch(`https://97414763bdeb5f30.mokky.dev/favorites?_relations=items`)) as any;
+
+			favorites.value = data.map((item: any) => item.item);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	const addToFavorite = async (item: MergedProduct) => {
 		try {
 			if (!item.isFavorite) {
 				const obj = {
@@ -85,9 +103,9 @@ export const useProductsStore = defineStore('products', () => {
 				item.favoriteId = null;
 			}
 		} catch (err) {
-			console.error(err);
+			console.log(err);
 		}
-	}
+	};
 
 	return {
 		items,
@@ -99,5 +117,6 @@ export const useProductsStore = defineStore('products', () => {
 		addToFavorite,
 		fetchItems,
 		fetchFavorites,
+		fetchFavoritesOnPage,
 	};
 });
