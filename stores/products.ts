@@ -5,6 +5,9 @@ export const useProductsStore = defineStore('products', () => {
 	const items = ref<MergedProduct[]>([]);
 	const cart = ref<MergedProduct[]>([]);
 	const favorites = ref<MergedProduct[]>([]);
+	const isCreating = ref(false);
+	const orderId = ref(false);
+	const orders = ref([]);
 
 	function addToCart(item: MergedProduct) {
 		cart.value = [...cart.value, item];
@@ -13,6 +16,8 @@ export const useProductsStore = defineStore('products', () => {
 	function removeFromCart(item: MergedProduct) {
 		cart.value.splice(cart.value.indexOf(item), 1);
 	}
+
+	const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0));
 
 	function sortBy(sortBy: 'price' | '-price' | 'name') {
 		switch (sortBy) {
@@ -32,7 +37,7 @@ export const useProductsStore = defineStore('products', () => {
 
 	async function fetchItems(params: string | null = null) {
 		try {
-			const data = (await $fetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`)) as any;
+			const data = (await $fetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`)) as MergedProduct[];
 
 			items.value = data.map((obj: IProduct) => ({
 				...obj,
@@ -47,7 +52,7 @@ export const useProductsStore = defineStore('products', () => {
 
 	async function fetchFavorites() {
 		try {
-			const data = (await $fetch('https://157b2cf8830f04b6.mokky.dev/favorites')) as any;
+			const data = (await $fetch('https://157b2cf8830f04b6.mokky.dev/favorites')) as MergedProduct[];
 
 			items.value = items.value.map(item => {
 				const favorite = data.find((favorite: any) => favorite.item_id === item.id);
@@ -73,11 +78,31 @@ export const useProductsStore = defineStore('products', () => {
 
 			favorites.value = data.map((item: any) => item.item);
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	}
 
-	const addToFavorite = async (item: MergedProduct) => {
+	async function createOrder() {
+		try {
+			isCreating.value = true;
+
+			const orderItems = {
+				items: cart.value,
+				totalPrice: totalPrice,
+			};
+
+			orders.value = orderItems;
+
+			console.log(orders.value);
+			cart.value = [];
+		} catch (err) {
+			console.error(err);
+		} finally {
+			isCreating.value = false;
+		}
+	}
+
+	async function addToFavorite(item: MergedProduct) {
 		try {
 			if (!item.isFavorite) {
 				const obj = {
@@ -103,9 +128,9 @@ export const useProductsStore = defineStore('products', () => {
 				item.favoriteId = null;
 			}
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
-	};
+	}
 
 	return {
 		items,
@@ -118,5 +143,8 @@ export const useProductsStore = defineStore('products', () => {
 		fetchItems,
 		fetchFavorites,
 		fetchFavoritesOnPage,
+		totalPrice,
+		createOrder,
+		isCreating,
 	};
 });

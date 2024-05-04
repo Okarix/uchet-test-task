@@ -4,9 +4,11 @@ import type { MergedProduct } from '~/types/dto';
 
 const store = useProductsStore();
 
-const { cart, items } = storeToRefs(store);
+const { cart, items, totalPrice, isCreating } = storeToRefs(store);
 
-const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0));
+const cartIsEmpty = computed(() => cart.value.length === 0);
+
+const btnDisabled = computed(() => isCreating.value || cartIsEmpty.value);
 
 watch(cart, () => {
 	items.value = items.value.map((item: MergedProduct) => ({
@@ -26,7 +28,13 @@ watch(cart, () => {
 				<b>{{ totalPrice }} тг.</b>
 			</div>
 
-			<button class="bg-zinc-800 w-full rounded-xl py-3 text-white hover:bg-zinc-900 transition active:bg-zinc-950 disabled:bg-slate-400 cursor-pointer">Оформить заказ</button>
+			<button
+				:disabled="btnDisabled"
+				@click="store.createOrder"
+				class="bg-zinc-800 w-full rounded-xl py-3 text-white hover:bg-zinc-900 transition active:bg-zinc-950 disabled:bg-zinc-500 disabled:text-slate-600 cursor-pointer"
+			>
+				Оформить заказ
+			</button>
 		</div>
 	</div>
 </template>

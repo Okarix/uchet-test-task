@@ -31,11 +31,11 @@ const props = defineProps({
 
 			<img
 				@click="onClickAdd"
-				src="../assets/icons/add.svg"
+				:src="!isAdded ? '/add.svg' : '/check.svg'"
 				alt="Add"
 			/>
 			<img
-				src="../assets/icons/like_1.svg"
+				:src="!isFavorite ? '/like_1.svg' : '/like_2.svg'"
 				alt="Like"
 				@click="onClickFavorite"
 			/>
