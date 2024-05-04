@@ -1,4 +1,6 @@
 <script setup>
+import { useProductsStore } from '#imports';
+
 defineProps({
 	id: Number,
 	imageUrl: String,
@@ -7,6 +9,8 @@ defineProps({
 	isFavorite: Boolean,
 	isAdded: Boolean,
 });
+
+const { addToFavorite } = useProductsStore();
 </script>
 
 <template>
@@ -14,7 +18,7 @@ defineProps({
 		<img
 			:src="imageUrl"
 			alt="Product"
-			class="rounded-md w-64 h-64 object-contain"
+			class="rounded-md min-w-64 min-h-64 object-contain"
 		/>
 
 		<p class="mt-2">{{ title }}</p>
@@ -32,6 +36,7 @@ defineProps({
 			<img
 				src="../assets/icons/like_1.svg"
 				alt="Like"
+				@click="addToFavorite({ id })"
 			/>
 		</div>
 	</div>

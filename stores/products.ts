@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { IProduct } from '~/types/dto';
+import type { IProduct, MergedProduct } from '~/types/dto';
 
 export const useProductsStore = defineStore('products', () => {
 	const items = ref<IProduct[]>([]);
@@ -31,10 +31,61 @@ export const useProductsStore = defineStore('products', () => {
 	}
 
 	async function fetchItems(params: string | null = null) {
-		const { data, error } = await useFetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`);
-		items.value = data.value as IProduct[];
+		const { data, error } = (await useFetch(`https://97414763bdeb5f30.mokky.dev/items?${params || ''}`)) as any;
 		if (error.value) {
 			console.error(error);
+		}
+
+		items.value = data.value.map((obj: any) => ({
+			...obj,
+			isFavorite: false,
+			isAdded: false,
+			favoriteId: null,
+		}));
+	}
+
+	async function fetchFavorites() {
+		const { data, error } = (await useFetch(`https://97414763bdeb5f30.mokky.dev/favorites?_relations=items`)) as any;
+		if (error.value) {
+			console.error(error);
+		}
+
+		items.value = data.value.map((item: any) => {
+			return {
+				...item.item,
+				isFavorite: true,
+				favoriteId: item.id,
+			};
+		});
+	}
+
+	async function addToFavorite(item: MergedProduct) {
+		try {
+			if (!item.isFavorite) {
+				const obj = {
+					item_id: item.id,
+				};
+
+				item.isFavorite = true;
+
+				const data = (await $fetch('https://97414763bdeb5f30.mokky.dev/favorites', {
+					method: 'POST',
+					body: JSON.stringify(obj),
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})) as any;
+
+				item.favoriteId = data.id;
+			} else {
+				item.isFavorite = false;
+				await $fetch(`https://97414763bdeb5f30.mokky.dev/favorites/${item.favoriteId}`, {
+					method: 'DELETE',
+				});
+				item.favoriteId = null;
+			}
+		} catch (err) {
+			console.error(err);
 		}
 	}
 
@@ -45,6 +96,8 @@ export const useProductsStore = defineStore('products', () => {
 		favorites,
 		addToCart,
 		removeFromCart,
+		addToFavorite,
 		fetchItems,
+		fetchFavorites,
 	};
 });
