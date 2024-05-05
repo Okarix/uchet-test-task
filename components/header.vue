@@ -21,6 +21,7 @@ watch(cart.value, () => {
 			<p class="text-xl font-bold">test-task</p>
 		</div>
 		<div class="flex items-center gap-6">
+			<switcher />
 			<nuxt-link to="/">
 				<img
 					src="../assets/icons/home.svg"
