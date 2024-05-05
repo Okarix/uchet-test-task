@@ -1,4 +1,14 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useProductsStore } from '../.nuxt/imports';
+
+const store = useProductsStore();
+
+const { cart } = storeToRefs(store);
+
+watch(cart.value, () => {
+	console.log(cart.value);
+});
+</script>
 
 <template>
 	<header class="px-8 flex items-center justify-between mx-auto w-11/12 h-200px bg-zinc-800 rounded-md shadow-md shadow-zinc-800">
@@ -24,12 +34,21 @@
 					class="w-8 h-8 cursor-pointer hover:opacity-10"
 				/>
 			</nuxt-link>
-			<nuxt-link to="/cart">
+			<nuxt-link
+				to="/cart"
+				class="relative"
+			>
 				<img
 					src="../assets/icons/cart.svg"
 					alt="Cart"
 					class="w-8 h-8 cursor-pointer hover:opacity-10"
 				/>
+				<div
+					v-if="cart.length > 0"
+					class="absolute top-5 w-5 h-5 bg-white bg-opacity-80 rounded-2xl text-black pl-1 font-bold"
+				>
+					{{ cart.length }}
+				</div>
 			</nuxt-link>
 		</div>
 	</header>

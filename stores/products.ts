@@ -6,7 +6,6 @@ export const useProductsStore = defineStore('products', () => {
 	const cart = ref<MergedProduct[]>([]);
 	const favorites = ref<MergedProduct[]>([]);
 	const isCreating = ref(false);
-	const orderId = ref(false);
 	const orders = ref([]);
 
 	function addToCart(item: MergedProduct) {
