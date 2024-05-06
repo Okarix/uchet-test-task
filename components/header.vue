@@ -46,7 +46,7 @@ watch(cart.value, () => {
 				/>
 				<div
 					v-if="cart.length > 0"
-					class="absolute top-5 w-5 h-5 bg-white bg-opacity-80 rounded-2xl text-black pl-1 font-bold"
+					class="absolute top-5 w-5 h-5 bg-white bg-opacity-80 rounded-2xl text-red-800 pl-1 font-bold"
 				>
 					{{ cart.length }}
 				</div>
